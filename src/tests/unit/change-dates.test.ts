@@ -93,7 +93,7 @@ describe('Usecase: Change dates', () => {
             endDate: new Date('2024-01-07T11:00:00.000Z'),
         }
         it('should throw an error', async () => {
-            await expect(usecase.execute(payload)).rejects.toThrow('You are not allowed to change dates of this conference')
+            await expect(usecase.execute(payload)).rejects.toThrow('You are not allowed to change this conference')
         })
     })
 
