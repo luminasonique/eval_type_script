@@ -66,7 +66,9 @@ describe('Usecase: Change dates', () => {
             startDate: new Date('2024-01-07T10:00:00.000Z'),
             endDate: new Date('2024-01-07T11:00:00.000Z'),
         }
-        it('should throw an error', async () => {})
+        it('should throw an error', async () => {
+            await expect(usecase.execute(payload)).rejects.toThrow('Conference not found')
+        })
     })
 
     describe('Scenario: change dates of conference of someone else', () => {
@@ -76,7 +78,9 @@ describe('Usecase: Change dates', () => {
             startDate: new Date('2024-01-07T10:00:00.000Z'),
             endDate: new Date('2024-01-07T11:00:00.000Z'),
         }
-        it('should throw an error', async () => {})
+        it('should throw an error', async () => {
+            await expect(usecase.execute(payload)).rejects.toThrow('You are not authorized to change the dates for this conference')
+        })
     })
 
     describe('Scenario: the new date is too soon', () => {
@@ -86,7 +90,9 @@ describe('Usecase: Change dates', () => {
             startDate: new Date('2024-01-02T10:00:00.000Z'),
             endDate: new Date('2024-01-02T11:00:00.000Z'),
         }
-        it('should throw an error', async () => {})
+        it('should throw an error', async () => {
+            await expect(usecase.execute(payload)).rejects.toThrow('Conference must happen in at least 3 days')
+        })
     })
 
     describe('Scenario: the conference is too long', () => {
@@ -96,6 +102,8 @@ describe('Usecase: Change dates', () => {
             startDate: new Date('2024-01-07T10:00:00.000Z'),
             endDate: new Date('2024-01-07T14:00:00.000Z'),
         }
-        it('should throw an error', async () => {})
+        it('should throw an error', async () => {
+            await expect(usecase.execute(payload)).rejects.toThrow('Conference is too long (> 3 hours)')
+        })
     })
 })
