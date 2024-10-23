@@ -1,4 +1,5 @@
 import { ChangeDates } from "../../usecases/change-dates"
+import { FixedDateGenerator } from "../fixed/fixed-date-generator"
 import { InMemoryBookingRepository } from "../in-memory/in-memory-booking-repository"
 import { InMemoryConferenceRepository } from "../in-memory/in-memory-conference-repository"
 import { InMemoryMailer } from "../in-memory/in-memory-mailer"
@@ -7,12 +8,23 @@ import { testBookings } from "./seeds/seeds-booking"
 import { testConferences } from "./seeds/seeds-conference"
 import { testUsers } from "./seeds/seeds-user"
 
+
 describe('Usecase: Change dates', () => {
+
+    async function expectDatesNotChanged() {
+        const fetchedConference = await conferenceRepository.findById(testConferences.conference.props.id)
+ 
+        expect(fetchedConference!.props.startDate).toEqual(testConferences.conference.props.startDate)
+        expect(fetchedConference!.props.endDate).toEqual(testConferences.conference.props.endDate)
+    }
+ 
+
     let conferenceRepository: InMemoryConferenceRepository
     let bookingRepository: InMemoryBookingRepository
     let userRepository: InMemoryUserRepository
     let mailer: InMemoryMailer
     let usecase: ChangeDates
+    let dateGenerator: FixedDateGenerator   
 
     beforeEach(async () => {
         conferenceRepository = new InMemoryConferenceRepository()
@@ -25,7 +37,9 @@ describe('Usecase: Change dates', () => {
         await userRepository.create(testUsers.alice)
 
         mailer = new InMemoryMailer()
-        usecase = new ChangeDates(conferenceRepository, mailer, bookingRepository, userRepository)
+
+        dateGenerator = new FixedDateGenerator()
+        usecase = new ChangeDates(conferenceRepository, mailer, bookingRepository, userRepository, dateGenerator)
     })
 
     describe('Scenario: Happy path', () => {
@@ -79,7 +93,7 @@ describe('Usecase: Change dates', () => {
             endDate: new Date('2024-01-07T11:00:00.000Z'),
         }
         it('should throw an error', async () => {
-            await expect(usecase.execute(payload)).rejects.toThrow('You are not authorized to change the dates for this conference')
+            await expect(usecase.execute(payload)).rejects.toThrow('You are not allowed to change dates of this conference')
         })
     })
 
@@ -92,6 +106,7 @@ describe('Usecase: Change dates', () => {
         }
         it('should throw an error', async () => {
             await expect(usecase.execute(payload)).rejects.toThrow('Conference must happen in at least 3 days')
+            expectDatesNotChanged()
         })
     })
 
