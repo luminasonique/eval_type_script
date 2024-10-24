@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { container } from "../../infrastructure/config/dependency-injection";
-import { ChangeSeatsInputs, CreateConferenceInputs } from "../dto/conference.dto";
+import { ChangeSeatsInputs, CreateConferenceInputs, ChangeDatesInputs } from "../dto/conference.dto";
 import { RequestValidator } from "../utils/validate-request";
 
 export const organizeConference = async (req: Request, res: Response, next: NextFunction) => {
@@ -45,7 +45,21 @@ export const changeSeats = async (req: Request, res: Response, next: NextFunctio
 
 export const changeDates = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        
+        const { conferenceId } = req.params;
+        const { startDate, endDate } = req.body;
+
+        const { input, errors } = await RequestValidator(ChangeDatesInputs, req.body);  // Valide l'input
+
+        if (errors) return res.jsonError(errors, 400);
+
+        await container('changeDatesUsecase').execute({
+            user: req.user,  // récupère l'utilisateur
+            conferenceId,
+            startDate: new Date(startDate),
+            endDate: new Date(endDate)
+        });
+
+        return res.jsonSuccess({ message: `Conference with id: ${conferenceId} dates were updated` }, 200);
     } catch (error) {
         next(error);
     }

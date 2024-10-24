@@ -23,6 +23,10 @@ describe('Usecase: Change Seats', () => {
         app = testApp.expressApp
     })
 
+    afterAll(async () => {
+        await testApp.teardown();
+    });
+
     it('should change the number of seats', async () => {
         const response = await request(app)
                                 .patch(`/conference/${testConferences.conference.props.id}`)
