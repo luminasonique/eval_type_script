@@ -10,8 +10,8 @@ declare module 'express-serve-static-core' {
 }
 
 export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
-    const userRepository = container('userRepository')
-    await userRepository.create(testUsers.johnDoe)
+    // const userRepository = container('userRepository')
+    // await userRepository.create(testUsers.johnDoe)
     
     try {
         const credentials = req.headers.authorization // Basic am9obmRvZUBnbWFpbC5jb206cXdlcnR5
