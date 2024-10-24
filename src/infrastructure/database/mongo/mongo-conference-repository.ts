@@ -2,7 +2,7 @@ import { Model } from "mongoose";
 import { IConferenceRepository } from "../../../interfaces/conference-repository.interface";
 import { Conference } from "../../../domain/entities/conference.entity";
 import { MongoConference } from "./mongo-conference";
- // Import the mapper
+
 
 export class MongoConferenceRepository implements IConferenceRepository {
     constructor(
@@ -12,14 +12,14 @@ export class MongoConferenceRepository implements IConferenceRepository {
     async findById(id: string): Promise<Conference | null> {
         const document = await this.model.findById(id);
         if (!document) return null;
-        return MongoConference.ConferenceMapper.toCore(document);  // Use the mapper to convert to domain entity
+        return MongoConference.ConferenceMapper.toCore(document);  
     }
 
     async create(conference: Conference): Promise<void> {
         const existingDocument = await this.model.findById(conference.props.id);
         if (existingDocument) throw new Error('Conference already exists');
 
-        const conferenceDoc = MongoConference.ConferenceMapper.toPersistence(conference); // Convert to persistence model
+        const conferenceDoc = MongoConference.ConferenceMapper.toPersistence(conference); 
         await conferenceDoc.save();
     }
 
