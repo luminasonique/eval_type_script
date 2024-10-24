@@ -20,6 +20,7 @@ export class TestApp {
 
 
         await mongoose.connect('mongodb://admin:qwerty@localhost:3702/conferences?authSource=admin')
+        await mongoose.connection.db?.collection('users').deleteMany({})
           
 
 

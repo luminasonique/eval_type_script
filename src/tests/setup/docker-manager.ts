@@ -45,3 +45,4 @@ export const getDockerInstance = () => {
     if(!instance) throw new Error('Docker compose instance is not running')
     return instance
 }
+
