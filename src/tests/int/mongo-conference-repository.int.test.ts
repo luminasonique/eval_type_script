@@ -2,7 +2,7 @@ import { Model } from "mongoose";
 import { MongoConference } from "../../infrastructure/database/mongo/mongo-conference";
 import { MongoConferenceRepository } from "../../infrastructure/database/mongo/mongo-conference-repository";
 import { TestApp } from "../e2e/utils/test-app";
-import { e2eConferences } from "../e2e/seeds/conference-e2e-seed"; // Adjust the path as necessary
+import { e2eConferences } from "../e2e/seeds/conference-e2e-seed";
 import { Conference } from "../../domain/entities/conference.entity";
 import { addDays, addHours } from "date-fns";
 
@@ -19,7 +19,7 @@ describe('MongoConferenceRepository Integration', () => {
         await model.deleteMany({});
         repository = new MongoConferenceRepository(model);
 
-        // Save the initial conference to the database
+        
         const record = new model({
             _id: e2eConferences.conference.entity.props.id,
             organizerId: e2eConferences.conference.entity.props.organizerId,

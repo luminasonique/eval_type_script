@@ -27,7 +27,7 @@ export class MongoConferenceRepository implements IConferenceRepository {
         const document = await this.model.findById(conference.props.id);
         if (!document) throw new Error('Conference not found');
 
-        // Update the document with new values
+       
         document.title = conference.props.title;
         document.startDate = conference.props.startDate;
         document.endDate = conference.props.endDate;
