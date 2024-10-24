@@ -53,8 +53,6 @@ describe('MongoUserRepository Integration', () => {
     describe('create', () => {
         it('should insert an user in the collection', async () => {
             await repository.create(testUsers.bob)
-            // const foundUser = await repository.findById(testUsers.bob.props.id)
-            // expect(foundUser!.props).toEqual(testUsers.bob.props)
             const foundUser = await model.findOne({_id: testUsers.bob.props.id})
             expect(foundUser!.email).toEqual({
                 _id: testUsers.bob.props.id,
